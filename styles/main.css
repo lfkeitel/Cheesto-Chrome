@@ -1,0 +1,13 @@
+body {
+    width: 300px;
+    font-family: sans;
+    background-color: lightgray;
+}
+
+.connectGood {
+    color: green;
+}
+
+.connectBad {
+    color: red;
+}

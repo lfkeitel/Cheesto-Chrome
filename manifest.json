@@ -1,0 +1,27 @@
+{
+	"manifest_version": 2,
+	"name": "Cheesto User Status",
+	"version": "0.0.0.2",
+	"author": "Onesimus Computer Systems",
+	"description" : "This extension interfaces with the Dandelion web application to provide access to the Cheesto user status system.",
+    "options_page": "options.html",
+
+	"browser_action": {
+		"default_title": "",
+		"default_popup": "popup.html",
+        "default_icon": {
+            "19": "images/icon19.png"
+        }
+	},
+
+	"background": {
+		"persistent": false,
+		"scripts": ["scripts/background.js"]
+	},
+
+    "permissions": [
+        "http://*/",
+        "https://*/",
+        "storage"
+    ]
+}
