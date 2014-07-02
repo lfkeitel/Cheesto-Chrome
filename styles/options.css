@@ -1,0 +1,25 @@
+body {
+  font-family: sans-serif;
+  margin: auto auto;
+  width: 47%;
+  min-width: 45em;
+  background-color: #6E6E6E;
+}
+
+a {
+  text-decoration: none;
+}
+
+table {
+  border: none;
+}
+
+td {
+  padding: 5px;
+}
+
+#main {
+  margin-top: 3em;
+  background-color: #F39A61;
+  padding: 4em;
+}
