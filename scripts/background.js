@@ -12,6 +12,7 @@ function getStatus(addr, key) {
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       var popup = chrome.extension.getViews({type: "popup"})[0];
+      console.log(JSON.parse(xhr.responseText));
       popup.displayCheesto(JSON.parse(xhr.responseText));
     }
   }

@@ -1,7 +1,7 @@
 body {
-    width: 300px;
+    width: 250px;
     font-family: sans-serif;
-    background-color: lightgray;
+    background-color: white;
 }
 
 .connectGood {
@@ -10,4 +10,26 @@ body {
 
 .connectBad {
     color: red;
+}
+
+table, td {
+  margin: auto auto;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.green {
+  color: green;
+}
+
+.blue {
+  color: blue;
+}
+
+.red {
+  color: red;
 }
