@@ -23,7 +23,7 @@ function save_options() {
         result = JSON.parse(xhr.responseText);
 
         if (result.errorcode == 0) {
-          chrome.storage.sync.set({
+          chrome.storage.local.set({
             dandelionAdd: address,
             dandelionAPI: apikey
           }, function() {
@@ -57,7 +57,7 @@ function displayStatus(message) {
 }
 
 function restore_options() {
-  chrome.storage.sync.get({
+  chrome.storage.local.get({
     dandelionAdd: '',
     dandelionAPI: ''
   }, function(items) {

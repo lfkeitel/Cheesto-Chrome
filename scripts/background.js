@@ -20,7 +20,7 @@ function getStatus(addr, key) {
 }
 
 function loadSettings() {
-  chrome.storage.sync.get({
+  chrome.storage.local.get({
     dandelionAdd: '',
     dandelionAPI: ''
   }, function(items) {
