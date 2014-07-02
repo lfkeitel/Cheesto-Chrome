@@ -18,6 +18,10 @@ function save_options() {
   var address = document.getElementById('dan_address').value;
   var apikey = document.getElementById('dan_apikey').value;
 
+  address = address.replace(/\/+$/, '');
+
+  document.getElementById('dan_address').value = address;
+
   var xhr = new XMLHttpRequest();
   xhr.open("POST", address+"/api/apitest", true);
   xhr.onreadystatechange = function() {
