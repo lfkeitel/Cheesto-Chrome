@@ -1,7 +1,12 @@
 body {
     width: 250px;
     font-family: sans-serif;
-    background-color: white;
+    background-color: #F39A61;
+    color: #000;
+}
+
+h2 {
+  text-align: center;
 }
 
 .connectGood {
