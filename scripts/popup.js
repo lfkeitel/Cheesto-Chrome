@@ -1,27 +1,10 @@
-document.getElementById("test").addEventListener('click', loadSettings);
+document.getElementById("test").addEventListener('click', main);
 
-function getStatus(addr, key) {
-  console.log(addr + " : " + key);
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", addr+"/api/cheesto/readall", true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4) {
-      formatJSON(xhr.responseText);
-    }
-  }
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.send("apikey="+key);
+function main() {
+  var background = chrome.extension.getBackgroundPage();
+  background.loadSettings();
 }
 
-function loadSettings() {
-  chrome.storage.sync.get({
-    dandelionAdd: '',
-    dandelionAPI: ''
-  }, function(items) {
-    getStatus(items.dandelionAdd, items.dandelionAPI);
-  });
-}
-
-function formatJSON(data) {
-  console.log(JSON.parse(data));
+function displayCheesto(json) {
+  console.log(json);
 }

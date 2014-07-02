@@ -15,13 +15,14 @@
 	},
 
 	"background": {
-		"persistent": false,
+		"persistent": true,
 		"scripts": ["scripts/background.js"]
 	},
 
     "permissions": [
         "http://*/",
         "https://*/",
-        "storage"
+        "storage",
+        "webRequest"
     ]
 }
