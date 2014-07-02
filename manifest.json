@@ -9,9 +9,7 @@
 	"browser_action": {
 		"default_title": "",
 		"default_popup": "popup.html",
-        "default_icon": {
-            "19": "images/icon19.png"
-        }
+        "default_icon": "images/icon_default_action.png"
 	},
 
 	"background": {
