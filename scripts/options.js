@@ -18,9 +18,14 @@ function save_options() {
   var address = document.getElementById('dan_address').value;
   var apikey = document.getElementById('dan_apikey').value;
 
-  address = address.replace(/\/+$/, '');
+  // Trim trailing slashes and spaces from web address
+  address = address.replace(/[\s/]+$/, '');
+  // Trim trailing whitespace from api key
+  apikey = apikey.replace(/\s+$/, '');
 
+  // Display modified strings back to user
   document.getElementById('dan_address').value = address;
+  document.getElementById('dan_apikey').value = apikey;
 
   var xhr = new XMLHttpRequest();
   xhr.open("POST", address+"/api/apitest", true);
