@@ -36,6 +36,19 @@ Build Instructions
 Release Notes
 -------------
 
+Upcoming
+
+- Option to save and load synced settings
+- Set your current status (API needs to be written first)
+
+v0.2.0
+
+- Options page is now styled
+- Regex replace to:
+  - Remove trailing slashes from address
+  - Remove trailing whitespace from address and api key
+- Settings are local by default
+
 v0.1.0
 
 - Initial release to beta test group
