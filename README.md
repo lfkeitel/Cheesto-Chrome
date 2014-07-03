@@ -1,4 +1,4 @@
-Cheesto User Status Extension v0.1.0
+Cheesto User Status Extension v0.2.0
 =====================================
 
 This extension interfaces with Dandelion's public API to display
