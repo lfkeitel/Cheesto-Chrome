@@ -56,7 +56,7 @@ v0.1.0
 Versioning
 ----------
 
-For transparency into the release cycle and in striving to maintain backward compatibility, Dandelion is maintained under the Semantic Versioning guidelines. Sometimes we screw up, but we'll adhere to these rules whenever possible.
+For transparency into the release cycle and in striving to maintain backward compatibility, the Cheesto Chrome Extension is maintained under the Semantic Versioning guidelines. Sometimes we screw up, but we'll adhere to these rules whenever possible.
 
 Releases will be numbered with the following format:
 
