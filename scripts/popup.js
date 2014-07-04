@@ -29,3 +29,7 @@ function displayCheesto(json) {
 
   $('#content').append(table);
 }
+
+function displayAPIError() {
+  $('#content').html("An error has occured.<br><br>Make sure the public API is enabled in Dandelion.");
+}
