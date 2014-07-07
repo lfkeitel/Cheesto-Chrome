@@ -1,6 +1,7 @@
 chrome.webRequest.onErrorOccurred.addListener(webOnErrorOccured, {urls: ["http://*/*", "https://*/*"]});
 
 var lastLogId = -1,
+    newLogCount = 0,
     logMonitor;
     
 var options = {};
@@ -49,7 +50,8 @@ function monitorLogs() {
       }
       else {
         if (data['data'][0]['logid'] > lastLogId) {
-          chrome.browserAction.setBadgeText({'text': (data['data'][0]['logid'] - lastLogId).toString()});
+          newLogCount = data['data'][0]['logid'] - lastLogId;
+          chrome.browserAction.setBadgeText({'text': newLogCount.toString()});
         }
       }
     
@@ -65,6 +67,7 @@ function clearLogCount() {
   clearTimeout(logMonitor);
   chrome.browserAction.setBadgeText({'text': ""});
   lastLogId = -1;
+  newLogCount = 0;
   monitorLogs();
 }
 

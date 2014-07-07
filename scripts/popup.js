@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', main);
 
 function main() {
   var background = chrome.extension.getBackgroundPage();
+  $("#newlogs").html("There are "+background.newLogCount+" new logs to view in <a href=\""+background.options.dAdd+"\" target=\"_blank\">Dandelion</a>");
   background.clearLogCount();
   background.getStatus();
 }
