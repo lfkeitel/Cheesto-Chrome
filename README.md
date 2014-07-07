@@ -1,4 +1,4 @@
-Cheesto User Status Extension v0.2.0
+Cheesto User Status Extension v0.3.0
 =====================================
 
 This extension interfaces with Dandelion's public API to display
@@ -40,6 +40,11 @@ Upcoming
 
 - Option to save and load synced settings
 - Set your current status (API needs to be written first)
+
+v0.3.0
+
+- Utilize new logs API
+- Show badge with number of new logs
 
 v0.2.0
 
