@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', main);
 
 function main() {
   var background = chrome.extension.getBackgroundPage();
-  background.loadSettings();
+  background.clearLogCount();
+  background.getStatus();
 }
 
 function displayCheesto(json) {
