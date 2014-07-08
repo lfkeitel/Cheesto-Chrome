@@ -60,8 +60,8 @@ function monitorLogs() {
       logMonitor = setTimeout(function() { monitorLogs(); }, 30000);
     })
     .fail(function() {
-      // If there's no response JSON (disabled API), check again in 2 minutes
-      logMonitor = setTimeout(function() { monitorLogs(); }, 120000);
+      // If there's no response JSON (disabled API), check again in 10 minutes
+      logMonitor = setTimeout(function() { monitorLogs(); }, 600000);
     });
 }
 
