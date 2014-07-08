@@ -10,20 +10,33 @@ function main() {
 }
 
 function displayCheesto(json) {
+  // Initialize variables
   var data = json.data;
-  var user;
-  var html;
+  var user, html, key;
   
+  // Clean up page and initialize new container element
   $('#content').remove();
   var appendedContent = $('<div/>').attr('id','content');
-  var table = $('<table/>');
+  
+  // Generate select box of status options
+  var statusSelect = $('<select/>').addClass('statusSelect');
+  
+  statusSelect.append('<option value="-1">Select:</option>');
+  
+  for (key in data.statusOptions) {
+    html = '<option value="'+key+'">'+data.statusOptions[key]+'</option>';
+    statusSelect.append(html);
+  }
 
+  // Generate the user status grid
+  var table = $('<table/>');
+  
   table.append('<tr>\
           <th width="50%">Name</th>\
           <th width="50%">Status</th>\
   </tr>');
 
-  for (var key in data) {
+  for (key in data) {
       if (data.hasOwnProperty(key)) {
         if (key !== "statusOptions") {  
           user = data[key];
@@ -37,19 +50,12 @@ function displayCheesto(json) {
         }
       }
   }
-  
-  var statusSelect = $('<select/>').addClass('statusSelect');
-  
-  statusSelect.append('<option value="-1">Select:</option>');
-  
-  for (var key2 in data.statusOptions) {
-    html = '<option value="'+key2+'">'+data.statusOptions[key2]+'</option>';
-    statusSelect.append(html);
-  }
 
+  // Append the separate elements to content div
   appendedContent.append(statusSelect);
   appendedContent.append(table);
   
+  // Append content div to existing page element
   $('#newlogs').after(appendedContent);
 }
 
