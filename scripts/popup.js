@@ -18,15 +18,20 @@ function displayCheesto(json) {
           <th width="50%">Status</th>\
   </tr>');
 
-  for(i=0; i<data.length; i++){
-      user = data[i];
-
-      html = '<tr>\
-          <td><span title="'+user['message']+'">'+user['realname']+'</span></td>\
-          <td><span title="'+user['statusInfo']['status']+'" class="'+user['statusInfo']['color']+'">'+user['statusInfo']['symbol']+'</td>\
-          </tr>';
-
-      table.append(html);
+  for (key in data) {
+      if (!data.hasOwnProperty(key))
+        continue;
+      
+      if (key !== "statusOptions") {  
+        user = data[key];
+  
+        html = '<tr>\
+            <td><span title="'+user['message']+'">'+user['realname']+'</span></td>\
+            <td><span title="'+user['statusInfo']['status']+'" class="'+user['statusInfo']['color']+'">'+user['statusInfo']['symbol']+'</td>\
+            </tr>';
+  
+        table.append(html);
+      }
   }
 
   $('#content').append(table);
