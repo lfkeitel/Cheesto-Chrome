@@ -39,6 +39,8 @@ function save_options() {
             dandelionAdd: address,
             dandelionAPI: apikey
           }, function() {
+            var background = chrome.extension.getBackgroundPage();
+            background.loadSettings();
             displayStatus('Options saved.')
           });
         }
