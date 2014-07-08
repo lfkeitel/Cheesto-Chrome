@@ -1,5 +1,5 @@
 body {
-    width: 250px;
+    width: 300px;
     font-family: sans-serif;
     background-color: #F39A61;
     color: #000;
@@ -10,14 +10,24 @@ h2 {
   margin-bottom: 10px;
 }
 
+#content {
+  text-align: center;
+}
+
+.statusSelect {
+  margin-bottom: 10px;
+}
+
 table, td, th {
   margin: auto auto;
   border: 1px solid black;
   padding: 5px;
+  text-align: center;
 }
 
 table {
   border-collapse: collapse;
+  width: 80%;
 }
 
 #newlogs {
