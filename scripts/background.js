@@ -1,3 +1,5 @@
+"use strict";
+
 chrome.webRequest.onErrorOccurred.addListener(webOnErrorOccured, {urls: ["http://*/*", "https://*/*"]});
 
 var lastLogId = -1,
@@ -17,8 +19,8 @@ function loadSettings() {
     dandelionAdd: '',
     dandelionAPI: ''
   }, function(items) {
-    options['dAdd'] = items.dandelionAdd;
-    options['dApi'] = items.dandelionAPI;
+    options.dAdd = items.dandelionAdd;
+    options.dApi = items.dandelionAPI;
   });
 }
 
@@ -32,7 +34,7 @@ function getStatus(addr, key) {
       popup.displayCheesto(data);
     })
     .fail(function(data) {
-      if (data['status'] == 200) {
+      if (data.status == 200) {
         var popup = chrome.extension.getViews({type: "popup"})[0];
         popup.displayAPIError();
       }
@@ -40,17 +42,17 @@ function getStatus(addr, key) {
 }
 
 function monitorLogs() {
-  addr = options.dAdd;
-  key = options.dApi;
+  var addr = options.dAdd;
+  var key = options.dApi;
   
   $.getJSON(addr+"/api/logs/read", {"apikey": key, "limit": 1})
     .done(function(data) {
       if (lastLogId == -1) {
-        lastLogId = data['data'][0]['logid'];
+        lastLogId = data.data[0].logid;
       }
       else {
-        if (data['data'][0]['logid'] > lastLogId) {
-          newLogCount = data['data'][0]['logid'] - lastLogId;
+        if (data.data[0].logid > lastLogId) {
+          newLogCount = data.data[0].logid - lastLogId;
           chrome.browserAction.setBadgeText({'text': newLogCount.toString()});
         }
       }
