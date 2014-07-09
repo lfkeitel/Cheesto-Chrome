@@ -42,7 +42,7 @@ function displayCheesto(json) {
           user = data[key];
     
           html = '<tr>\
-              <td><span title="'+user.message+'">'+user.realname+'</span></td>\
+              <td class="textLeft"><span title="'+user.message+'">'+user.realname+'</span></td>\
               <td><span title="'+user.statusInfo.status+'" class="'+user.statusInfo.color+'">'+user.statusInfo.symbol+'</td>\
               </tr>';
     

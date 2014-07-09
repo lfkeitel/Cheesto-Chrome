@@ -25,6 +25,10 @@ table, td, th {
   text-align: center;
 }
 
+td.textLeft {
+    text-align: left;
+}
+
 table {
   border-collapse: collapse;
   width: 80%;
