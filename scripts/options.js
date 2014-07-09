@@ -3,6 +3,8 @@ document.getElementById('save').addEventListener('click', save_options);
 chrome.runtime.onMessage.addListener(function(request) { handleWebError(request.webError); });
 
 function handleWebError(details) {
+  "use strict";
+  
   if (details.error == "net::ERR_CONNECTION_REFUSED") {
     displayStatus('Error validating API key. Connection Refused', 'red');
   }
@@ -15,6 +17,8 @@ function handleWebError(details) {
 }
 
 function save_options() {
+  "use strict";
+  
   var address = document.getElementById('dan_address').value;
   var apikey = document.getElementById('dan_apikey').value;
 
@@ -32,16 +36,16 @@ function save_options() {
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
-        result = JSON.parse(xhr.responseText);
+        var result = JSON.parse(xhr.responseText);
 
-        if (result.errorcode == 0) {
+        if (result.errorcode === 0) {
           chrome.storage.local.set({
             dandelionAdd: address,
             dandelionAPI: apikey
           }, function() {
             var background = chrome.extension.getBackgroundPage();
             background.loadSettings();
-            displayStatus('Options saved.')
+            displayStatus('Options saved.');
           });
         }
         else if (result.errorcode == 1) {
@@ -56,12 +60,14 @@ function save_options() {
         displayStatus('Error: ' + xhr.statusText, 'red');
       }
     }
-  }
+  };
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.send("apikey="+apikey);
 }
 
 function displayStatus(message, classColor) {
+  "use strict";
+  
   classColor = typeof classColor !== 'undefined' ? classColor : '';
   var status = document.getElementById('status');
 
@@ -75,6 +81,8 @@ function displayStatus(message, classColor) {
 }
 
 function restore_options() {
+  "use strict";
+  
   chrome.storage.local.get({
     dandelionAdd: '',
     dandelionAPI: ''

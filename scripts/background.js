@@ -1,5 +1,3 @@
-"use strict";
-
 chrome.webRequest.onErrorOccurred.addListener(webOnErrorOccured, {urls: ["http://*/*", "https://*/*"]});
 
 var lastLogId = -1,
@@ -9,12 +7,16 @@ var lastLogId = -1,
 var options = {};
 
 function webOnErrorOccured(details) {
+  "use strict";
+  
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {webError: details});
   });
 }
 
 function loadSettings() {
+  "use strict";
+  
   chrome.storage.local.get({
     dandelionAdd: '',
     dandelionAPI: ''
@@ -24,24 +26,9 @@ function loadSettings() {
   });
 }
 
-function getStatus(addr, key) {
-  addr = options.dAdd;
-  key = options.dApi;
-  
-  $.getJSON(addr+"/api/cheesto/readall", {"apikey": key})
-    .done(function(data) {
-      var popup = chrome.extension.getViews({type: "popup"})[0];
-      popup.displayCheesto(data);
-    })
-    .fail(function(data) {
-      if (data.status == 200) {
-        var popup = chrome.extension.getViews({type: "popup"})[0];
-        popup.displayAPIError();
-      }
-    });
-}
-
 function monitorLogs() {
+  "use strict";
+  
   var addr = options.dAdd;
   var key = options.dApi;
   
@@ -66,6 +53,8 @@ function monitorLogs() {
 }
 
 function clearLogCount() {
+  "use strict";
+  
   clearTimeout(logMonitor);
   chrome.browserAction.setBadgeText({'text': ""});
   lastLogId = -1;
@@ -74,6 +63,8 @@ function clearLogCount() {
 }
 
 (function() {
+  "use strict";
+  
   loadSettings();
   // Allow time for the settings to be loaded
   setTimeout(function() { monitorLogs(); }, 1000);

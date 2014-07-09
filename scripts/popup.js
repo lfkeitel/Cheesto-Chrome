@@ -1,15 +1,37 @@
-"use strict";
-
 document.addEventListener('DOMContentLoaded', main);
+var refreshTimeout;
 
 function main() {
+  "use strict";
+  
   var background = chrome.extension.getBackgroundPage();
   $("#newlogs").html("There are "+background.newLogCount+" new logs to view in <a href=\""+background.options.dAdd+"\" target=\"_blank\">Dandelion</a>");
   background.clearLogCount();
-  background.getStatus();
+  getStatus();
+}
+
+function getStatus() {
+  "use strict";
+  
+  var background = chrome.extension.getBackgroundPage();
+  var addr = background.options.dAdd;
+  var key = background.options.dApi;
+  
+  $.getJSON(addr+"/api/cheesto/readall", {"apikey": key})
+    .done(function(data) {
+      displayCheesto(data);
+      refreshTimeout = setTimeout(function() { getStatus(); }, 30000);
+    })
+    .fail(function(data) {
+      if (data.status == 200) {
+        displayAPIError();
+      }
+    });
 }
 
 function displayCheesto(json) {
+  "use strict";
+  
   // Initialize variables
   var data = json.data;
   var user, html, key;
@@ -19,7 +41,9 @@ function displayCheesto(json) {
   var appendedContent = $('<div/>').attr('id','content');
   
   // Generate select box of status options
-  var statusSelect = $('<select/>').addClass('statusSelect');
+  var statusSelect = $('<select/>');
+  statusSelect.attr('id', 'statusSelect');
+  statusSelect.change(function() { updateStatus(); });
   
   statusSelect.append('<option value="-1">Select:</option>');
   
@@ -59,6 +83,25 @@ function displayCheesto(json) {
   $('#newlogs').after(appendedContent);
 }
 
+function updateStatus() {
+  "use strict";
+  
+  var background = chrome.extension.getBackgroundPage();
+  var newStatus = $("select#statusSelect").prop("selectedIndex");
+  
+  $.post(background.options.dAdd+"/api/cheesto/update",
+    {"apikey": background.options.dApi,
+     "message": "",
+     "status": newStatus,
+     "returntime": "Today"
+    })
+    .done(function() {
+      main();
+    });
+}
+
 function displayAPIError() {
+  "use strict";
+  
   $('#content').html("An error has occured.<br><br>Make sure the public API is enabled in Dandelion.");
 }
