@@ -1,4 +1,4 @@
-Cheesto User Status Extension v0.4.0
+Cheesto User Status Extension v1.0.0
 =====================================
 
 This extension interfaces with Dandelion's public API to display
@@ -39,7 +39,11 @@ Release Notes
 Upcoming
 
 - Option to save and load synced settings
- 
+
+v1.0.0
+
+- Added support for Dandelion version 6
+
 v0.4.0
 
 - Preliminary ability to set a status
