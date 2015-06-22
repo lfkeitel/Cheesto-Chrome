@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
 	"name": "Cheesto User Status",
-	"version": "0.4.0",
-	"author": "Onesimus Computer Systems",
+	"version": "1.0.0",
+	"author": "Onesimus Systems",
 	"description" : "Access the Cheesto User Status system of the Dandelion web application without an open tab.",
   "options_page": "options.html",
   "short_name": "Cheesto",
