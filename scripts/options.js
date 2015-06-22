@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(function(request) { handleWebError(request.
 
 function handleWebError(details) {
   "use strict";
-  
+
   if (details.error == "net::ERR_CONNECTION_REFUSED") {
     displayStatus('Error validating API key. Connection Refused', 'red');
   }
@@ -18,7 +18,7 @@ function handleWebError(details) {
 
 function save_options() {
   "use strict";
-  
+
   var address = document.getElementById('dan_address').value;
   var apikey = document.getElementById('dan_apikey').value;
 
@@ -31,43 +31,38 @@ function save_options() {
   document.getElementById('dan_address').value = address;
   document.getElementById('dan_apikey').value = apikey;
 
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", address+"/api/apitest", true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4) {
-      if (xhr.status == 200) {
-        var result = JSON.parse(xhr.responseText);
+  $.getJSON(address+"/api/apitest", {"apikey": apikey})
+    .done(function(data) {
+      if (data.errorcode === 0) {
+        storeSettings(address, apikey, '5');
+      } else {
+        $.getJSON(address+"/api/key/test", {"apikey": apikey})
+          .done(function(data) {
+            if (data.errorcode === 0) {
+              storeSettings(address, apikey, '6');
+            } else {
+              displayStatus('Error validating API key. Check the key and path and try again', 'red');
+            }
+        });
+      }
+  });
+}
 
-        if (result.errorcode === 0) {
-          chrome.storage.local.set({
-            dandelionAdd: address,
-            dandelionAPI: apikey
-          }, function() {
-            var background = chrome.extension.getBackgroundPage();
-            background.loadSettings();
-            displayStatus('Options saved.');
-          });
-        }
-        else if (result.errorcode == 1) {
-            displayStatus('API key is invalid', 'red');
-        }
-      }
-      else if (xhr.status == 404) {
-        displayStatus('Error validating API key. File Not Found.<br>\
-          Is the path correct? Are you using Dandelion version 5+?', 'red');
-      }
-      else {
-        displayStatus('Error: ' + xhr.statusText, 'red');
-      }
-    }
-  };
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.send("apikey="+apikey);
+function storeSettings(address, apikey, version) {
+  chrome.storage.local.set({
+    dandelionAdd: address,
+    dandelionAPI: apikey,
+    dandelionVer: version
+  }, function() {
+    var background = chrome.extension.getBackgroundPage();
+    background.loadSettings();
+    displayStatus('Options saved.');
+  });
 }
 
 function displayStatus(message, classColor) {
   "use strict";
-  
+
   classColor = typeof classColor !== 'undefined' ? classColor : '';
   var status = document.getElementById('status');
 
@@ -82,7 +77,7 @@ function displayStatus(message, classColor) {
 
 function restore_options() {
   "use strict";
-  
+
   chrome.storage.local.get({
     dandelionAdd: '',
     dandelionAPI: ''
