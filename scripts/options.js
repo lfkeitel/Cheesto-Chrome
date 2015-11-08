@@ -7,11 +7,9 @@ function handleWebError(details) {
 
   if (details.error == "net::ERR_CONNECTION_REFUSED") {
     displayStatus('Error validating API key. Connection Refused', 'red');
-  }
-  else if (details.error == "net::ERR_NAME_NOT_RESOLVED") {
+  } else if (details.error == "net::ERR_NAME_NOT_RESOLVED") {
     displayStatus('Invalid hostname. Name Not Resolved', 'red');
-  }
-  else {
+  } else {
     displayStatus('Error: ' + details.error, 'red');
   }
 }
@@ -31,17 +29,19 @@ function save_options() {
   document.getElementById('dan_address').value = address;
   document.getElementById('dan_apikey').value = apikey;
 
-  $.getJSON(address+"/api/apitest", {"apikey": apikey})
+  // First test for version 6
+  $.getJSON(address+"/api/key/test", {"apikey": apikey})
     .done(function(data) {
       if (data.errorcode === 0) {
-        storeSettings(address, apikey, '5');
+        storeSettings(address, apikey, 6);
       } else {
-        $.getJSON(address+"/api/key/test", {"apikey": apikey})
+        // Next test for version 5
+        $.getJSON(address+"/api/apitest", {"apikey": apikey})
           .done(function(data) {
             if (data.errorcode === 0) {
-              storeSettings(address, apikey, '6');
+              storeSettings(address, apikey, 5);
             } else {
-              displayStatus('Error validating API key. Check the key and path and try again', 'red');
+              displayStatus('Error validating API key. Make sure you have the right path and key and that Dandelion is version 5 or newer.', 'red');
             }
         });
       }

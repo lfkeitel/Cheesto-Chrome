@@ -1,19 +1,13 @@
-Cheesto User Status Extension v1.0.0
+Cheesto User Status Extension v1.0.1
 =====================================
 
-This extension interfaces with Dandelion's public API to display
-the current status of users in Cheesto.
+This extension interfaces with Dandelion's public API to display the current status of users in Cheesto.
 
 Requirements
 ------------
 
 * Chrome
 * Dandelion v5+
-
-Is it any good?
----------------
-
-[Yes](https://news.ycombinator.com/item?id=3067434)
 
 Use Instructions
 ----------------
@@ -39,6 +33,10 @@ Release Notes
 Upcoming
 
 - Option to save and load synced settings
+
+v1.0.1
+
+- Code cleanup, preperation for next version
 
 v1.0.0
 

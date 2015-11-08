@@ -1,5 +1,5 @@
 Cheesto User Status Extension for Chrome
-Copyright (C) 2014  Lee Keitel, Onesimus Computer Systems
+Copyright (C) 2015  Lee Keitel, Onesimus Systems
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

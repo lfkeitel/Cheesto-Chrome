@@ -1,3 +1,5 @@
+/*jshint multistr: true */
+
 document.addEventListener('DOMContentLoaded', main);
 var refreshTimeout;
 
@@ -7,31 +9,28 @@ function main() {
   var background = chrome.extension.getBackgroundPage();
   $("#newlogs").html("There are "+background.newLogCount+" new logs to view in <a href=\""+background.options.dAdd+"\" target=\"_blank\">Dandelion</a>");
   background.clearLogCount();
-  getStatus();
+  getStatus(background);
 }
 
-function getStatus() {
+function getStatus(bgPage) {
   "use strict";
 
-  var background = chrome.extension.getBackgroundPage();
-  var addr = background.options.dAdd;
-  var key = background.options.dApi;
-  var ver = background.options.dVer;
+  var addr = bgPage.options.dAdd;
+  var key = bgPage.options.dApi;
+  var ver = bgPage.options.dVer;
 
-  var fulladdress = '';
-
-  if (ver === '5') {
-    fulladdress = addr+"/api/cheesto/readall";
-  } else if (ver === '6') {
-    fulladdress = addr+"/api/cheesto/read";
+  var fulladdress = addr+"/api/cheesto/read";
+  if (ver === 5) {
+      // /api/cheesto/readall
+      fulladdress += 'all';
   }
 
   $.getJSON(fulladdress, {"apikey": key})
     .done(function(data) {
-      if (ver === '5') {
-        displayCheesto5(data);
-      } else if (ver === '6') {
-        displayCheesto6(data);
+      if (ver === 5) {
+        displayCheesto(data, true);
+      } else {
+        displayCheesto(data);
       }
       refreshTimeout = setTimeout(function() { getStatus(); }, 30000);
     })
@@ -42,12 +41,16 @@ function getStatus() {
     });
 }
 
-function displayCheesto5(json) {
+// When compatibility is set to true, rendering will be done with Dandelion v5 field names
+function displayCheesto(json, compatibility) {
   "use strict";
+  if (typeof compatibility === 'undefined') {
+      compatibility = false;
+  }
 
   // Initialize variables
   var data = json.data;
-  var user, html, key;
+  var user, key, html;
 
   // Clean up page and initialize new container element
   $('#content').remove();
@@ -61,7 +64,12 @@ function displayCheesto5(json) {
   statusSelect.append('<option value="-1">Select:</option>');
 
   for (key in data.statusOptions) {
-    html = '<option value="'+key+'">'+data.statusOptions[key]+'</option>';
+    if (compatibility) {
+        // Version 5
+        html = '<option value="'+key+'">'+data.statusOptions[key]+'</option>';
+    } else {
+        html = '<option value="'+data.statusOptions[key]+'">'+data.statusOptions[key]+'</option>';
+    }
     statusSelect.append(html);
   }
 
@@ -78,64 +86,18 @@ function displayCheesto5(json) {
         if (key !== "statusOptions") {
           user = data[key];
 
-          html = '<tr>\
+          if (compatibility) {
+            // Version 5
+            html = '<tr>\
               <td class="textLeft"><span title="'+user.message+'">'+user.realname+'</span></td>\
               <td><span title="'+user.statusInfo.status+'" class="'+user.statusInfo.color+'">'+user.statusInfo.symbol+'</td>\
               </tr>';
-
-          table.append(html);
-        }
-      }
-  }
-
-  // Append the separate elements to content div
-  appendedContent.append(statusSelect);
-  appendedContent.append(table);
-
-  // Append content div to existing page element
-  $('#newlogs').after(appendedContent);
-}
-
-function displayCheesto6(json) {
-  "use strict";
-
-  // Initialize variables
-  var data = json.data;
-  var user, html, key;
-
-  // Clean up page and initialize new container element
-  $('#content').remove();
-  var appendedContent = $('<div/>').attr('id','content');
-
-  // Generate select box of status options
-  var statusSelect = $('<select/>');
-  statusSelect.attr('id', 'statusSelect');
-  statusSelect.change(function() { updateStatus(); });
-
-  statusSelect.append('<option value="-1">Select:</option>');
-
-  for (key in data.statusOptions) {
-    html = '<option value="'+data.statusOptions[key]+'">'+data.statusOptions[key]+'</option>';
-    statusSelect.append(html);
-  }
-
-  // Generate the user status grid
-  var table = $('<table/>');
-
-  table.append('<tr>\
-          <th width="50%">Name</th>\
-          <th width="50%">Status</th>\
-  </tr>');
-
-  for (key in data) {
-      if (data.hasOwnProperty(key)) {
-        if (key !== "statusOptions") {
-          user = data[key];
-
-          html = '<tr>\
+          } else {
+            html = '<tr>\
               <td class="textLeft"><span title="'+user.message+'">'+user.fullname+'</span></td>\
               <td><span title="'+user.returntime+'">'+user.status+'</td>\
               </tr>';
+          }
 
           table.append(html);
         }
@@ -154,11 +116,9 @@ function updateStatus() {
   "use strict";
 
   var background = chrome.extension.getBackgroundPage();
-  var newStatus = '';
+  var newStatus =  $("select#statusSelect").val();
 
-  if (background.options.dVer === '6') {
-    newStatus = $("select#statusSelect").val();
-  } else if (background.options.dVer === '5') {
+  if (background.options.dVer === 5) {
     newStatus = $("select#statusSelect").prop("selectedIndex");
   }
 

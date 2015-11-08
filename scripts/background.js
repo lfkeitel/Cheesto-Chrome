@@ -14,7 +14,7 @@ function webOnErrorOccured(details) {
   });
 }
 
-function loadSettings() {
+function loadSettings(callback) {
   "use strict";
 
   chrome.storage.local.get({
@@ -25,6 +25,7 @@ function loadSettings() {
     options.dAdd = items.dandelionAdd;
     options.dApi = items.dandelionAPI;
     options.dVer = items.dandelionVer;
+    callback();
   });
 }
 
@@ -37,27 +38,21 @@ function monitorLogs() {
 
   $.getJSON(addr+"/api/logs/read", {"apikey": key, "limit": 1})
     .done(function(data) {
-      if (ver === '5') {
-        if (lastLogId == -1) {
-          lastLogId = data.data[0].logid;
-        } else {
-          if (data.data[0].logid > lastLogId) {
-            newLogCount = data.data[0].logid - lastLogId;
-            chrome.browserAction.setBadgeText({'text': newLogCount.toString()});
-          }
+        var field = "id";
+        if (ver === 5) {
+            field = "logid";
         }
-      } else if (ver === '6') {
-        if (lastLogId == -1) {
-          lastLogId = data.data[0].id;
-        } else {
-          if (data.data[0].id > lastLogId) {
-            newLogCount = data.data[0].id - lastLogId;
-            chrome.browserAction.setBadgeText({'text': newLogCount.toString()});
-          }
-        }
-      }
 
-      logMonitor = setTimeout(function() { monitorLogs(); }, 30000);
+        if (lastLogId == -1) {
+          lastLogId = data.data[0][field];
+        } else {
+          if (data.data[0][field] > lastLogId) {
+            newLogCount = data.data[0][field] - lastLogId;
+            chrome.browserAction.setBadgeText({'text': newLogCount.toString()});
+          }
+        }
+
+        logMonitor = setTimeout(function() { monitorLogs(); }, 30000);
     })
     .fail(function() {
       // If there's no response JSON (disabled API), check again in 10 minutes
@@ -78,7 +73,5 @@ function clearLogCount() {
 (function() {
   "use strict";
 
-  loadSettings();
-  // Allow time for the settings to be loaded
-  setTimeout(function() { monitorLogs(); }, 1000);
+  loadSettings(monitorLogs);
 })();
