@@ -34,6 +34,12 @@ Upcoming
 
 - Option to save and load synced settings
 
+v1.1.0
+
+- Add right click option to clear logs
+- Use ES6 template strings
+- Ask for a status message when setting
+
 v1.0.1
 
 - Code cleanup, preperation for next version

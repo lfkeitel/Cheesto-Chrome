@@ -1,33 +1,33 @@
 {
 	"manifest_version": 2,
 	"name": "Cheesto User Status",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"author": "Onesimus Systems",
-	"description" : "Access the Cheesto User Status system of the Dandelion web application without an open tab.",
+	"description": "Access the Cheesto User Status system of the Dandelion web application without an open tab.",
 	"options_page": "options.html",
 	"short_name": "Cheesto",
-
 	"browser_action": {
 		"default_title": "",
 		"default_popup": "popup.html",
 		"default_icon": "images/icon_default_action.png"
 	},
-
 	"icons": {
 		"16": "images/icon_tiny_16.png",
 		"48": "images/icon_small_48.png",
 		"128": "images/icon_128.png"
 	},
-
 	"background": {
 		"persistent": true,
-		"scripts": ["scripts/jquery-2.1.1.min.js", "scripts/background.js"]
+		"scripts": [
+			"scripts/jquery-2.1.1.min.js",
+			"scripts/background.js"
+		]
 	},
-
-  "permissions": [
+	"permissions": [
 		"http://*/",
 		"https://*/",
 		"storage",
-		"webRequest"
-  ]
+		"webRequest",
+		"contextMenus"
+	]
 }

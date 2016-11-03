@@ -1,10 +1,10 @@
+"use strict";
+
 document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('save').addEventListener('click', save_options);
+$('#save').click(save_options);
 chrome.runtime.onMessage.addListener(function(request) { handleWebError(request.webError); });
 
 function handleWebError(details) {
-  "use strict";
-
   if (details.error == "net::ERR_CONNECTION_REFUSED") {
     displayStatus('Error validating API key. Connection Refused', 'red');
   } else if (details.error == "net::ERR_NAME_NOT_RESOLVED") {
@@ -15,10 +15,8 @@ function handleWebError(details) {
 }
 
 function save_options() {
-  "use strict";
-
-  var address = document.getElementById('dan_address').value;
-  var apikey = document.getElementById('dan_apikey').value;
+  var address = $('#dan_address').val();
+  var apikey = $('#dan_apikey').val();
 
   // Trim trailing slashes and spaces from web address
   address = address.replace(/[\s/]+$/, '');
@@ -26,26 +24,26 @@ function save_options() {
   apikey = apikey.replace(/\s+$/, '');
 
   // Display modified strings back to user
-  document.getElementById('dan_address').value = address;
-  document.getElementById('dan_apikey').value = apikey;
+  $('#dan_address').val(address);
+  $('#dan_apikey').val(apikey);
 
   // First test for version 6
-  $.getJSON(address+"/api/key/test", {"apikey": apikey})
+  $.getJSON(address + "/api/key/test", { "apikey": apikey })
     .done(function(data) {
       if (data.errorcode === 0) {
         storeSettings(address, apikey, 6);
       } else {
         // Next test for version 5
-        $.getJSON(address+"/api/apitest", {"apikey": apikey})
+        $.getJSON(address + "/api/apitest", { "apikey": apikey })
           .done(function(data) {
             if (data.errorcode === 0) {
               storeSettings(address, apikey, 5);
             } else {
               displayStatus('Error validating API key. Make sure you have the right path and key and that Dandelion is version 5 or newer.', 'red');
             }
-        });
+          });
       }
-  });
+    });
 }
 
 function storeSettings(address, apikey, version) {
@@ -61,28 +59,24 @@ function storeSettings(address, apikey, version) {
 }
 
 function displayStatus(message, classColor) {
-  "use strict";
-
   classColor = typeof classColor !== 'undefined' ? classColor : '';
-  var status = document.getElementById('status');
+  var status = $('#status');
 
-  status.innerHTML = message;
-  status.className = classColor;
+  status.html(message);
+  status.addClass(classColor);
 
   setTimeout(function() {
-    status.textContent = '';
-    status.className = '';
+    status.html('');
+    status.removeClass(classColor);
   }, 5000);
 }
 
 function restore_options() {
-  "use strict";
-
   chrome.storage.local.get({
     dandelionAdd: '',
     dandelionAPI: ''
   }, function(items) {
-    document.getElementById('dan_address').value = items.dandelionAdd;
-    document.getElementById('dan_apikey').value = items.dandelionAPI;
+    $('#dan_address').val(items.dandelionAdd);
+    $('#dan_apikey').val(items.dandelionAPI);
   });
 }
