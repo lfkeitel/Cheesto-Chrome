@@ -14,21 +14,12 @@ function main() {
 function getStatus(bgPage) {
   var addr = bgPage.options.dAdd;
   var key = bgPage.options.dApi;
-  var ver = bgPage.options.dVer;
 
   var fulladdress = `${addr}/api/cheesto/read`;
-  if (ver === 5) {
-    // /api/cheesto/readall
-    fulladdress += 'all';
-  }
 
   $.getJSON(fulladdress, { "apikey": key })
     .done(function(data) {
-      if (ver === 5) {
-        displayCheesto(data, true);
-      } else {
-        displayCheesto(data, false);
-      }
+      displayCheesto(data);
       refreshTimeout = setTimeout(function() { getStatus(); }, 30000);
     })
     .fail(function(data) {
@@ -38,8 +29,7 @@ function getStatus(bgPage) {
     });
 }
 
-// When compatibility is set to true, rendering will be done with Dandelion v5 field names
-function displayCheesto(json, compatibility) {
+function displayCheesto(json) {
   // Initialize variables
   var data = json.data;
   var user, key, html;
@@ -56,12 +46,7 @@ function displayCheesto(json, compatibility) {
   statusSelect.append('<option value="-1">Select:</option>');
 
   for (key in data.statusOptions) {
-    if (compatibility) {
-      // Version 5
-      html = `<option value="${key}">${data.statusOptions[key]}</option>`;
-    } else {
-      html = `<option value="${data.statusOptions[key]}">${data.statusOptions[key]}</option>`;
-    }
+    html = `<option value="${data.statusOptions[key]}">${data.statusOptions[key]}</option>`;
     statusSelect.append(html);
   }
 
@@ -74,14 +59,7 @@ function displayCheesto(json, compatibility) {
     if (data.hasOwnProperty(key)) {
       if (key !== "statusOptions") {
         user = data[key];
-
-        if (compatibility) {
-          // Version 5
-          html = `<tr><td class="textLeft"><span title="${user.message}">${user.realname}</span></td><td><span title="${user.statusInfo.status}" class="${user.statusInfo.color}">${user.statusInfo.symbol}</td></tr>`;
-        } else {
-          html = `<tr><td class="textLeft"><span title="${user.message}">${user.fullname}</span></td><td><span title="${user.returntime}">${user.status}</td></tr>`;
-        }
-
+        html = `<tr><td class="textLeft"><span title="${user.message}">${user.fullname}</span></td><td><span title="${user.returntime}">${user.status}</td></tr>`;
         table.append(html);
       }
     }
@@ -98,10 +76,6 @@ function displayCheesto(json, compatibility) {
 function updateStatus() {
   var background = chrome.extension.getBackgroundPage();
   var newStatus = $("select#statusSelect").val();
-
-  if (background.options.dVer === 5) {
-    newStatus = $("select#statusSelect").prop("selectedIndex");
-  }
 
   var message = "";
 

@@ -29,15 +29,10 @@ function loadSettings(callback) {
 function monitorLogs() {
   var addr = options.dAdd;
   var key = options.dApi;
-  var ver = options.dVer;
 
   $.getJSON(addr + "/api/logs/read", { "apikey": key, "limit": 1 })
     .done(function(data) {
       var field = "id";
-      if (ver === 5) {
-        field = "logid";
-      }
-
       if (lastLogId == -1) {
         lastLogId = data.data[0][field];
       } else {

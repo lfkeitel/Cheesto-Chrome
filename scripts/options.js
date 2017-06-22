@@ -33,15 +33,7 @@ function save_options() {
       if (data.errorcode === 0) {
         storeSettings(address, apikey, 6);
       } else {
-        // Next test for version 5
-        $.getJSON(address + "/api/apitest", { "apikey": apikey })
-          .done(function(data) {
-            if (data.errorcode === 0) {
-              storeSettings(address, apikey, 5);
-            } else {
-              displayStatus('Error validating API key. Make sure you have the right path and key and that Dandelion is version 5 or newer.', 'red');
-            }
-          });
+        displayStatus('Error validating API key. Make sure you have the right path and key and that Dandelion is version 6 or newer.', 'red');
       }
     });
 }
