@@ -18,11 +18,13 @@
     chrome.storage.local.get({
       dandelionAdd: '',
       dandelionAPI: '',
-      dandelionVer: ''
+      dandelionVer: 6,
+      dandelionLogNum: 5
     }, function(items) {
       options.dAdd = items.dandelionAdd;
       options.dApi = items.dandelionAPI;
       options.dVer = items.dandelionVer;
+      options.dLogNum = items.dandelionLogNum;
       callback();
     });
   }
@@ -69,4 +71,5 @@
   window.options = options;
   window.newLogCount = newLogCount;
   window.clearLogCount = clearLogCount;
+  window.loadSettings = loadSettings;
 })();

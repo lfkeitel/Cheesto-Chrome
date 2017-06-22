@@ -1,8 +1,11 @@
 body {
-    width: 300px;
-    font-family: sans-serif;
-    background-color: #F39A61;
-    color: #000;
+  width: 500px;
+  font-family: sans-serif;
+  background-color: #F39A61;
+  color: #000;
+  margin: 0;
+  margin-bottom: 15px;
+  font-size: medium;
 }
 
 h2 {
@@ -14,6 +17,10 @@ h2 {
   text-align: center;
 }
 
+#app {
+  margin-top: 60px;
+}
+
 #statusSelect {
   margin-bottom: 10px;
 }
@@ -23,7 +30,6 @@ table, td, th {
   border: 1px solid black;
   padding: 5px;
   text-align: center;
-  font-size: medium;
 }
 
 td.textLeft {
@@ -50,4 +56,65 @@ table {
 
 .red {
   color: red;
+}
+
+.title {
+  font-weight: bold;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.active-tab {
+  background-color: #F39A61;
+}
+
+nav a {
+  width: 50%;
+  background-color: lightgrey;
+  display: inline-block;
+  margin: 0;
+  padding: 10px 0;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  font-size: 1.25em;
+}
+
+.log {
+  padding: 15px;
+}
+
+.log-separator {
+  border-bottom: 2px solid black;
+}
+
+.log-title {
+  display: block;
+  font-size: large;
+  font-weight: bold;
+  text-align: center;
+}
+
+.log-body {
+  margin: 20px 0;
+  word-wrap: break-word;
+  position: relative;
+  max-height: 220px;
+  overflow: hidden;
+}
+
+.log-body:after {
+  content:"";
+  position:absolute;
+  top:160px;
+  left:0;
+  height:60px;
+  width:100%;
+  background: linear-gradient(rgba(0,0,0,0), #F39A61);
 }

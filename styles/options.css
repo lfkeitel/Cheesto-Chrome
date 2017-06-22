@@ -24,6 +24,8 @@ td {
   padding: 4em;
 }
 
-.red {
-  color: red;
+.error {
+  font-weight: bold;
+  font-size: 1.5em;
+  color: darkred;
 }
