@@ -34,6 +34,10 @@ Upcoming
 
 - Option to save and load synced settings
 
+v2.0.0
+
+- Added logs tab
+
 v1.1.0
 
 - Add right click option to clear logs

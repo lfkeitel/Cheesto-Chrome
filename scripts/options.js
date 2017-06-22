@@ -1,82 +1,95 @@
-"use strict";
+(function() {
+  "use strict";
 
-document.addEventListener('DOMContentLoaded', restore_options);
-$('#save').click(save_options);
-chrome.runtime.onMessage.addListener(function(request) { handleWebError(request.webError); });
-
-function handleWebError(details) {
-  if (details.error == "net::ERR_CONNECTION_REFUSED") {
-    displayStatus('Error validating API key. Connection Refused', 'red');
-  } else if (details.error == "net::ERR_NAME_NOT_RESOLVED") {
-    displayStatus('Invalid hostname. Name Not Resolved', 'red');
-  } else {
-    displayStatus('Error: ' + details.error, 'red');
+  function handleWebError(details) {
+    if (details.error == "net::ERR_CONNECTION_REFUSED") {
+      displayStatus('Error validating API key. Connection Refused', 'error');
+    } else if (details.error == "net::ERR_NAME_NOT_RESOLVED") {
+      displayStatus('Invalid hostname. Name Not Resolved', 'error');
+    } else {
+      displayStatus('Error: ' + details.error, 'error');
+    }
   }
-}
 
-function save_options() {
-  var address = $('#dan_address').val();
-  var apikey = $('#dan_apikey').val();
+  function save_options() {
+    var address = $('#dan_address').val();
+    var apikey = $('#dan_apikey').val();
+    var logNum = $('#dan_log_number').val();
 
-  // Trim trailing slashes and spaces from web address
-  address = address.replace(/[\s/]+$/, '');
-  // Trim trailing whitespace from api key
-  apikey = apikey.replace(/\s+$/, '');
+    // Trim trailing slashes and spaces from web address
+    address = address.replace(/[\s/]+$/, '');
+    // Trim trailing whitespace from api key
+    apikey = apikey.replace(/\s+$/, '');
 
-  // Display modified strings back to user
-  $('#dan_address').val(address);
-  $('#dan_apikey').val(apikey);
+    var parsedLogNum = parseInt(logNum, 10);
+    console.log(parsedLogNum);
+    if (isNaN(parsedLogNum)) {
+      displayStatus('Please enter a number for logs field.', 'error');
+      return;
+    }
 
-  // First test for version 6
-  $.getJSON(address + "/api/key/test", { "apikey": apikey })
-    .done(function(data) {
-      if (data.errorcode === 0) {
-        storeSettings(address, apikey, 6);
-      } else {
-        // Next test for version 5
-        $.getJSON(address + "/api/apitest", { "apikey": apikey })
-          .done(function(data) {
-            if (data.errorcode === 0) {
-              storeSettings(address, apikey, 5);
-            } else {
-              displayStatus('Error validating API key. Make sure you have the right path and key and that Dandelion is version 5 or newer.', 'red');
-            }
-          });
-      }
+    if (parsedLogNum < 1 || parsedLogNum > 50) {
+      displayStatus('# of logs must be between 1 and 50 inclusive', 'error');
+      return;
+    }
+
+    // Display modified strings back to user
+    $('#dan_address').val(address);
+    $('#dan_apikey').val(apikey);
+
+    // First test for version 6
+    $.getJSON(address + "/api/key/test", { "apikey": apikey })
+      .done(function(data) {
+        if (data.errorcode === 0) {
+          storeSettings(address, apikey, 6, parsedLogNum);
+        } else {
+          displayStatus('Error validating API key. Make sure you have the right path and key and that Dandelion is version 6 or newer.', 'error');
+        }
+      });
+  }
+
+  function storeSettings(address, apikey, version, logNum) {
+    chrome.storage.local.set({
+      dandelionAdd: address,
+      dandelionAPI: apikey,
+      dandelionVer: version,
+      dandelionLogNum: logNum
+    }, function() {
+      var background = chrome.extension.getBackgroundPage();
+      background.loadSettings();
+      displayStatus('Options saved.');
     });
-}
+  }
 
-function storeSettings(address, apikey, version) {
-  chrome.storage.local.set({
-    dandelionAdd: address,
-    dandelionAPI: apikey,
-    dandelionVer: version
-  }, function() {
-    var background = chrome.extension.getBackgroundPage();
-    background.loadSettings();
-    displayStatus('Options saved.');
-  });
-}
+  function displayStatus(message, classColor) {
+    clearTimeout(statusTimeout);
+    classColor = typeof classColor !== 'undefined' ? classColor : '';
+    var status = $('#status');
 
-function displayStatus(message, classColor) {
-  classColor = typeof classColor !== 'undefined' ? classColor : '';
-  var status = $('#status');
+    status.html(message);
+    status.addClass(classColor);
 
-  status.html(message);
-  status.addClass(classColor);
+    statusTimeout = setTimeout(function() {
+      status.html('');
+      status.removeClass(classColor);
+    }, 5000);
+  }
 
-  setTimeout(function() {
-    status.html('');
-    status.removeClass(classColor);
-  }, 5000);
-}
+  function restore_options() {
+    chrome.storage.local.get({
+      dandelionAdd: '',
+      dandelionAPI: '',
+      dandelionLogNum: 5
+    }, function(items) {
+      $('#dan_address').val(items.dandelionAdd);
+      $('#dan_apikey').val(items.dandelionAPI);
+      $('#dan_log_number').val(items.dandelionLogNum);
+    });
+  }
 
-function restore_options() {
-  chrome.storage.local.get({
-    dandelionAdd: '',
-    dandelionAPI: ''
-  }, function(items) {
-    $('#dan_address').val(items.dandelionAdd);
-    $('#dan_apikey').val(items.dandelionAPI);
-  });
-}
+  var statusTimeout;
+  document.addEventListener('DOMContentLoaded', restore_options);
+  $('#save').click(save_options);
+  chrome.runtime.onMessage.addListener(function(request) { handleWebError(request.webError); });
+
+})();
