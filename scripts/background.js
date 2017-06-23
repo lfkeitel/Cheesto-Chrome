@@ -40,12 +40,13 @@
           lastLogId = data.data[0][field];
         } else {
           if (data.data[0][field] > lastLogId) {
-            newLogCount = data.data[0][field] - lastLogId;
+            newLogCount++;
+            lastLogId = data.data[0][field];
             chrome.browserAction.setBadgeText({ 'text': newLogCount.toString() });
           }
         }
 
-        logMonitor = setTimeout(function() { monitorLogs(); }, 30000);
+        logMonitor = setTimeout(function() { monitorLogs(); }, 5000);
       })
       .fail(function() {
         // If there's no response JSON (disabled API), check again in 10 minutes
@@ -60,6 +61,10 @@
     monitorLogs();
   }
 
+  function getNewLogCount() {
+    return newLogCount;
+  }
+
   loadSettings(monitorLogs);
   chrome.contextMenus.create({
     contexts: ['browser_action'],
@@ -69,7 +74,7 @@
 
   // Export functions and variables
   window.options = options;
-  window.newLogCount = newLogCount;
+  window.newLogCount = getNewLogCount;
   window.clearLogCount = clearLogCount;
   window.loadSettings = loadSettings;
 })();

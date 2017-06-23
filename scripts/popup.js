@@ -10,13 +10,14 @@
     options.hostname = background.options.dAdd;
     options.apikey = background.options.dApi;
     options.logNum = background.options.dLogNum;
-    background.clearLogCount();
 
-    if (background.newLogCount > 0) {
+    if (background.newLogCount() > 0) {
       renderLogsView();
     } else {
       renderStatusView();
     }
+
+    background.clearLogCount();
   }
 
   function swapPage(content, page) {
