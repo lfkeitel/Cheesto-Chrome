@@ -5,6 +5,10 @@
 	"author": "Onesimus Systems",
 	"description": "Quickly access basic Dandelion functions.",
 	"options_page": "options.html",
+	"options_ui": {
+		"page": "options.html",
+		"chrome_style": true
+	},
 	"short_name": "Cheesto",
 	"browser_action": {
 		"default_title": "",
