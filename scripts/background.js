@@ -65,11 +65,21 @@
     return newLogCount;
   }
 
+  function goToDandelion() {
+    window.open(options.dAdd, "_blank");
+  }
+
   loadSettings(monitorLogs);
   chrome.contextMenus.create({
     contexts: ['browser_action'],
     onclick: clearLogCount,
     title: "Clear log count"
+  });
+
+  chrome.contextMenus.create({
+    contexts: ['browser_action'],
+    onclick: goToDandelion,
+    title: "Go to Dandelion"
   });
 
   // Export functions and variables

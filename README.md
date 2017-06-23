@@ -37,6 +37,7 @@ Upcoming
 v2.0.1
 
 - Fixed log count bug
+- Added back Dandelion link, right click extension icon
 
 v2.0.0
 
