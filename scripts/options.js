@@ -7,6 +7,8 @@
       displayStatus('Error validating API key. Connection Refused', 'error');
     } else if (details.error == "net::ERR_NAME_NOT_RESOLVED") {
       displayStatus('Invalid hostname. Name Not Resolved', 'error');
+    } else if (details.error == "net::ERR_ABORTED") {
+      return;
     } else {
       displayStatus('Error: ' + details.error, 'error');
     }
@@ -17,6 +19,7 @@
     var apikey = $('#dan_apikey').val();
     var logNum = $('#dan_log_number').val();
     var tabDefault = $('#dan_default_tab').val();
+    var filterMine = $('#dan_filter_mine').prop('checked');
 
     // Trim trailing slashes and spaces from web address
     address = address.replace(/[\s/]+$/, '');
@@ -24,7 +27,6 @@
     apikey = apikey.replace(/\s+$/, '');
 
     var parsedLogNum = parseInt(logNum, 10);
-    console.log(parsedLogNum);
     if (isNaN(parsedLogNum)) {
       displayStatus('Please enter a number for logs field.', 'error');
       return;
@@ -47,7 +49,7 @@
     $.getJSON(address + "/api/key/test", { "apikey": apikey })
       .done(function(data) {
         if (data.errorcode === 0) {
-          storeSettings(address, apikey, 6, parsedLogNum, tabDefault);
+          storeSettings(address, apikey, 6, parsedLogNum, tabDefault, filterMine);
         } else {
           displayStatus('Error validating API key. Make sure you have the right path and key and that Dandelion is version 6 or newer.', 'error');
         }
@@ -57,13 +59,14 @@
       });
   }
 
-  function storeSettings(address, apikey, version, logNum, tabDefault) {
+  function storeSettings(address, apikey, version, logNum, tabDefault, filterMine) {
     chrome.storage.local.set({
       dandelionAdd: address,
       dandelionAPI: apikey,
       dandelionVer: version,
       dandelionLogNum: logNum,
-      dandelionTabDefault: tabDefault
+      dandelionTabDefault: tabDefault,
+      dandelionFilterMine: filterMine
     }, function() {
       var background = chrome.extension.getBackgroundPage();
       background.loadSettings();
@@ -100,12 +103,14 @@
       dandelionAdd: '',
       dandelionAPI: '',
       dandelionLogNum: 5,
-      dandelionTabDefault: 'dynamic'
+      dandelionTabDefault: 'dynamic',
+      dandelionFilterMine: false
     }, function(items) {
       $('#dan_address').val(items.dandelionAdd);
       $('#dan_apikey').val(items.dandelionAPI);
       $('#dan_log_number').val(items.dandelionLogNum);
       $('#dan_default_tab').val(items.dandelionTabDefault);
+      $('#dan_filter_mine').prop('checked', items.dandelionFilterMine);
     });
   }
 

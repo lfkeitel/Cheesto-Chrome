@@ -31,6 +31,7 @@ v2.1.0
 - Added option to set default tab behavior
 - Fixed background errors
 - Fixed short check timeout
+- Added option to ignore user's own logs in badge count
 
 v2.0.1
 
