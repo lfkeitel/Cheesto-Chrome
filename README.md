@@ -34,6 +34,10 @@ Upcoming
 
 - Option to save and load synced settings
 
+v2.1.0
+
+- Added "New Log Entry" to context menu
+
 v2.0.1
 
 - Fixed log count bug

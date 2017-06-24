@@ -69,18 +69,32 @@
     window.open(options.dAdd, "_blank");
   }
 
-  loadSettings(monitorLogs);
-  chrome.contextMenus.create({
-    contexts: ['browser_action'],
-    onclick: clearLogCount,
-    title: "Clear log count"
-  });
+  function goToNewLog() {
+    window.open(`${options.dAdd}/log/new`, "_blank");
+  }
 
-  chrome.contextMenus.create({
-    contexts: ['browser_action'],
-    onclick: goToDandelion,
-    title: "Go to Dandelion"
-  });
+  function addContextMenuItems() {
+    chrome.contextMenus.create({
+      contexts: ['browser_action'],
+      onclick: goToNewLog,
+      title: "New Log Entry"
+    });
+
+    chrome.contextMenus.create({
+      contexts: ['browser_action'],
+      onclick: goToDandelion,
+      title: "Go to Dandelion"
+    });
+
+    chrome.contextMenus.create({
+      contexts: ['browser_action'],
+      onclick: clearLogCount,
+      title: "Clear log count"
+    });
+  }
+
+  loadSettings(monitorLogs);
+  addContextMenuItems();
 
   // Export functions and variables
   window.options = options;
