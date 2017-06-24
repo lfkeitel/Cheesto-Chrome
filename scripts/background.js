@@ -1,18 +1,11 @@
 (function() {
   "use strict";
-  chrome.webRequest.onErrorOccurred.addListener(webOnErrorOccured, { urls: ["http://*/*", "https://*/*"] });
 
   var lastLogId = -1,
     newLogCount = 0,
     logMonitor;
 
   var options = {};
-
-  function webOnErrorOccured(details) {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { webError: details });
-    });
-  }
 
   function loadSettings(callback) {
     chrome.storage.local.get({
@@ -25,7 +18,9 @@
       options.dApi = items.dandelionAPI;
       options.dVer = items.dandelionVer;
       options.dLogNum = items.dandelionLogNum;
-      callback();
+      if (typeof callback === "function") {
+         callback();
+      }
     });
   }
 

@@ -1,5 +1,6 @@
 (function() {
   "use strict";
+  chrome.webRequest.onErrorOccurred.addListener(handleWebError, { urls: ["http://*/*", "https://*/*"] });
 
   function handleWebError(details) {
     if (details.error == "net::ERR_CONNECTION_REFUSED") {
@@ -45,6 +46,9 @@
         } else {
           displayStatus('Error validating API key. Make sure you have the right path and key and that Dandelion is version 6 or newer.', 'error');
         }
+      })
+      .fail(function() {
+        displayStatus('Please check URL and try again.', 'error');
       });
   }
 
@@ -90,6 +94,4 @@
   var statusTimeout;
   document.addEventListener('DOMContentLoaded', restore_options);
   $('#save').click(save_options);
-  chrome.runtime.onMessage.addListener(function(request) { handleWebError(request.webError); });
-
 })();
