@@ -11,13 +11,26 @@
     options.apikey = background.options.dApi;
     options.logNum = background.options.dLogNum;
 
-    if (background.newLogCount() > 0) {
+    switch(background.options.tabDefault) {
+      case 'logs':
+        renderLogsView();
+        break;
+      case 'cheesto':
+        renderStatusView();
+        break;
+      default:
+        renderDynamicStartTab(background.newLogCount());
+    }
+
+    background.clearLogCount();
+  }
+
+  function renderDynamicStartTab(logCount) {
+    if (logCount > 0) {
       renderLogsView();
     } else {
       renderStatusView();
     }
-
-    background.clearLogCount();
   }
 
   function swapPage(content, page) {

@@ -12,12 +12,15 @@
       dandelionAdd: '',
       dandelionAPI: '',
       dandelionVer: 6,
-      dandelionLogNum: 5
+      dandelionLogNum: 5,
+      dandelionTabDefault: 'dynamic'
     }, function(items) {
       options.dAdd = items.dandelionAdd;
       options.dApi = items.dandelionAPI;
       options.dVer = items.dandelionVer;
       options.dLogNum = items.dandelionLogNum;
+      options.tabDefault = items.dandelionTabDefault;
+
       if (typeof callback === "function") {
          callback();
       }

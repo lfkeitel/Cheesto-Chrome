@@ -16,6 +16,7 @@
     var address = $('#dan_address').val();
     var apikey = $('#dan_apikey').val();
     var logNum = $('#dan_log_number').val();
+    var tabDefault = $('#dan_default_tab').val();
 
     // Trim trailing slashes and spaces from web address
     address = address.replace(/[\s/]+$/, '');
@@ -34,6 +35,10 @@
       return;
     }
 
+    if (!validTabDefault(tabDefault)) {
+      tabDefault = 'dynamic';
+    }
+
     // Display modified strings back to user
     $('#dan_address').val(address);
     $('#dan_apikey').val(apikey);
@@ -42,7 +47,7 @@
     $.getJSON(address + "/api/key/test", { "apikey": apikey })
       .done(function(data) {
         if (data.errorcode === 0) {
-          storeSettings(address, apikey, 6, parsedLogNum);
+          storeSettings(address, apikey, 6, parsedLogNum, tabDefault);
         } else {
           displayStatus('Error validating API key. Make sure you have the right path and key and that Dandelion is version 6 or newer.', 'error');
         }
@@ -52,17 +57,28 @@
       });
   }
 
-  function storeSettings(address, apikey, version, logNum) {
+  function storeSettings(address, apikey, version, logNum, tabDefault) {
     chrome.storage.local.set({
       dandelionAdd: address,
       dandelionAPI: apikey,
       dandelionVer: version,
-      dandelionLogNum: logNum
+      dandelionLogNum: logNum,
+      dandelionTabDefault: tabDefault
     }, function() {
       var background = chrome.extension.getBackgroundPage();
       background.loadSettings();
       displayStatus('Options saved.');
     });
+  }
+
+  function validTabDefault(candidate) {
+    switch(candidate) {
+      case 'dynamic':
+      case 'logs':
+      case 'cheesto':
+        return true;
+    }
+    return false;
   }
 
   function displayStatus(message, classColor) {
@@ -83,11 +99,13 @@
     chrome.storage.local.get({
       dandelionAdd: '',
       dandelionAPI: '',
-      dandelionLogNum: 5
+      dandelionLogNum: 5,
+      dandelionTabDefault: 'dynamic'
     }, function(items) {
       $('#dan_address').val(items.dandelionAdd);
       $('#dan_apikey').val(items.dandelionAPI);
       $('#dan_log_number').val(items.dandelionLogNum);
+      $('#dan_default_tab').val(items.dandelionTabDefault);
     });
   }
 
