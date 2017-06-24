@@ -46,7 +46,7 @@
           }
         }
 
-        logMonitor = setTimeout(function() { monitorLogs(); }, 5000);
+        logMonitor = setTimeout(function() { monitorLogs(); }, 10000);
       })
       .fail(function() {
         // If there's no response JSON (disabled API), check again in 10 minutes
