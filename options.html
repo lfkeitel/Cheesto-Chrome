@@ -8,7 +8,7 @@
 
 <body>
 	<div id="main">
-		<h2>Dandelion - &#264;eesto User Statuses - Options</h2>
+		<h1>Dandelion Extension - Options</h1>
 
 		<table>
 			<tr>
@@ -25,13 +25,29 @@
 				<td># of logs to show in logs tab:</td>
 				<td><input type="number" id="dan_log_number" size="3"></td>
 			</tr>
+
+			<tr>
+				<td>Default tab:</td>
+				<td>
+					<select id="dan_default_tab">
+						<option value="dynamic">Dynamic</option>
+						<option value="logs">Logs</option>
+						<option value="cheesto">Cheesto</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<td>Ignore my logs:</td>
+				<td><input type="checkbox" id="dan_filter_mine"></td>
+			</tr>
 		</table>
 
 		<button id="save">Save</button><br><br>
 		<div id="status"></div><br>
 
 		<div id="footer">
-			&copy; Copyright 2015 - Version 2.0.0 - <a href="http://blog.onesimussystems.com" target="_blank">Onesimus Systems</a>			- Licensed under BSD 3-Clause
+			&copy; Copyright 2015 - Version 2.1.0 - <a href="http://blog.onesimussystems.com" target="_blank">Onesimus Systems</a>			- Licensed under BSD 3-Clause
 		</div>
 	</div>
 
