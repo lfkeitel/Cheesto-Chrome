@@ -1,42 +1,36 @@
-Cheesto User Status Extension v2.0.1
-=====================================
+# Dandelion Extension
 
-This extension interfaces with Dandelion's public API to display the current status of users in Cheesto.
+This extension interfaces with Dandelion's public API to display the Cheesto status and recent log entries.
 
-Requirements
-------------
+## Requirements
 
 * Chrome
-* Dandelion v5+
+* Dandelion v6+
 
-Use Instructions
-----------------
+## Use Instructions
 
 1. Right click the extension icon
 2. Click Options
 3. Enter the domain name or IP of your Dandelion instance
 4. Enter your API Key from Dandelion (found under Settings -> API Key in Dandelion)
 5. Click Save Options
-6. Click the extension icon to see user statuses
+6. Click the extension icon to see user statuses and logs
 
-Build Instructions
-------------------
+## Build Instructions
 
 1. Clone this git repo
 2. In Chrome, enable developer mode
 3. Click "Load unpacked extension" in extension management
 4. Navigate to the folder where you cloned the repo
 
-Release Notes
--------------
-
-Upcoming
-
-- Option to save and load synced settings
+## Release Notes
 
 v2.1.0
 
 - Added "New Log Entry" to context menu
+- Added option to set default tab behavior
+- Fixed background errors
+- Fixed short check timeout
 
 v2.0.1
 
@@ -87,8 +81,7 @@ v0.1.0
 
 - Initial release to beta test group
 
-Versioning
-----------
+## Versioning
 
 For transparency into the release cycle and in striving to maintain backward compatibility, the Cheesto Chrome Extension is maintained under the Semantic Versioning guidelines. Sometimes we screw up, but we'll adhere to these rules whenever possible.
 
