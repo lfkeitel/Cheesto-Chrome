@@ -79,7 +79,7 @@
     statusSelect.append('<option value="-1">Select:</option>');
 
     for (key in data.statusOptions) {
-      html = `<option value="${data.statusOptions[key]}">${data.statusOptions[key]}</option>`;
+      var html = `<option value="${data.statusOptions[key]}">${data.statusOptions[key]}</option>`;
       statusSelect.append(html);
     }
 
