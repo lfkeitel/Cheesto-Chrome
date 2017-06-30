@@ -7,12 +7,26 @@
 
   function main() {
     var background = chrome.extension.getBackgroundPage();
-    options.hostname = background.options.dAdd;
-    options.apikey = background.options.dApi;
-    options.logNum = background.options.dLogNum;
-    background.clearLogCount();
+    options.hostname = background.options.hostname;
+    options.apikey = background.options.apikey;
+    options.logLimit = background.options.logLimit;
 
-    if (background.newLogCount > 0) {
+    switch(background.options.tabDefault) {
+      case 'logs':
+        renderLogsView();
+        break;
+      case 'cheesto':
+        renderStatusView();
+        break;
+      default:
+        renderDynamicStartTab(background.newLogCount());
+    }
+
+    background.clearLogCount();
+  }
+
+  function renderDynamicStartTab(logCount) {
+    if (logCount > 0) {
       renderLogsView();
     } else {
       renderStatusView();
@@ -96,7 +110,6 @@
   }
 
   function updateStatus() {
-    var background = chrome.extension.getBackgroundPage();
     var newStatus = $("select#statusSelect").val();
 
     var message = "";
@@ -109,9 +122,9 @@
       }
     }
 
-    $.post(`${background.options.dAdd}/api/cheesto/update`,
+    $.post(`${options.hostname}/api/cheesto/update`,
       {
-        apikey: background.options.dApi,
+        apikey: options.apikey,
         message: message,
         status: newStatus,
         returntime: "Today"
@@ -124,7 +137,7 @@
   function renderLogsView(logcount) {
     var fulladdress = `${options.hostname}/api/logs/read`;
 
-    $.getJSON(fulladdress, { "apikey": options.apikey, "limit": options.logNum })
+    $.getJSON(fulladdress, { "apikey": options.apikey, "limit": options.logLimit })
       .done(function(json) {
         if (json.errorcode !== 0) {
           displayAPIError("logs");
