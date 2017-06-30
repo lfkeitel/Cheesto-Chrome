@@ -25,6 +25,10 @@ This extension interfaces with Dandelion's public API to display the Cheesto sta
 
 ## Release Notes
 
+v2.1.1
+
+- Fixed bug where status select wasn't working
+
 v2.1.0
 
 - Added "New Log Entry" to context menu

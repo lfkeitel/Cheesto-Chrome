@@ -56,6 +56,10 @@
         // Append content div to existing page element
         cheestoView.append(html);
         swapPage(cheestoView, "cheesto");
+        // For some reason the click handler wasn't being applied
+        // in the renderCheestoTable function so I'm applying it
+        // here instead.
+        $('#statusSelect').click(function() { updateStatus(); });
       })
       .fail(function(data) {
         if (data.status == 200) {
@@ -71,12 +75,11 @@
     // Generate select box of status options
     var statusSelect = $('<select/>');
     statusSelect.attr('id', 'statusSelect');
-    statusSelect.change(function() { updateStatus(); });
 
     statusSelect.append('<option value="-1">Select:</option>');
 
     for (key in data.statusOptions) {
-      html = `<option value="${data.statusOptions[key]}">${data.statusOptions[key]}</option>`;
+      var html = `<option value="${data.statusOptions[key]}">${data.statusOptions[key]}</option>`;
       statusSelect.append(html);
     }
 
