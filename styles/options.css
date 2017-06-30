@@ -1,9 +1,13 @@
 body {
   font-family: sans-serif;
   margin: auto auto;
-  width: 800px;
-  min-width: 45em;
+  width: 1000px;
   background-color: #6E6E6E;
+  font-size: 1.1em;
+}
+
+h1 {
+  font-weight: bold;
 }
 
 a {
@@ -19,7 +23,7 @@ td {
 }
 
 #main {
-  margin-top: 3em;
+  margin-top: 1em;
   background-color: #F39A61;
   padding: 4em;
 }

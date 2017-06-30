@@ -1,56 +1,94 @@
 (function() {
   "use strict";
-  chrome.webRequest.onErrorOccurred.addListener(webOnErrorOccured, { urls: ["http://*/*", "https://*/*"] });
 
-  var lastLogId = -1,
-    newLogCount = 0,
-    logMonitor;
-
+  var lastLogId = -1;
+  var newLogCount = 0;
+  var logMonitor;
   var options = {};
 
-  function webOnErrorOccured(details) {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { webError: details });
-    });
-  }
+  const monitorTimeout = 10000;
+  const monitorFailedTimeout = 600000;
 
   function loadSettings(callback) {
     chrome.storage.local.get({
       dandelionAdd: '',
       dandelionAPI: '',
       dandelionVer: 6,
-      dandelionLogNum: 5
+      dandelionLogNum: 5,
+      dandelionTabDefault: 'dynamic',
+      dandelionFilterMine: false
     }, function(items) {
-      options.dAdd = items.dandelionAdd;
-      options.dApi = items.dandelionAPI;
-      options.dVer = items.dandelionVer;
-      options.dLogNum = items.dandelionLogNum;
-      callback();
+      options.hostname = items.dandelionAdd;
+      options.apikey = items.dandelionAPI;
+      options.version = items.dandelionVer;
+      options.logLimit = items.dandelionLogNum;
+      options.tabDefault = items.dandelionTabDefault;
+      options.filterMine = items.dandelionFilterMine;
+
+      $.getJSON(options.hostname + "/api/users/getuser", { "apikey": options.apikey})
+        .done(function(json) {
+          var data = json.data;
+          options.username = data[0].fullname;
+
+          if (typeof callback === "function") {
+            callback();
+          }
+        })
+        .fail(function() { })
     });
   }
 
   function monitorLogs() {
-    var addr = options.dAdd;
-    var key = options.dApi;
+    if (lastLogId == -1) {
+      getFirstID();
+      return;
+    }
 
-    $.getJSON(addr + "/api/logs/read", { "apikey": key, "limit": 1 })
-      .done(function(data) {
-        var field = "id";
-        if (lastLogId == -1) {
-          lastLogId = data.data[0][field];
-        } else {
-          if (data.data[0][field] > lastLogId) {
+    $.getJSON(options.hostname + "/api/logs/read", { "apikey": options.apikey, "limit": 10})
+      .done(function(json) {
+        var data = json.data;
+
+        if (data.metadata.resultCount > 0 && data[0].id > lastLogId) {
+          for (var i = 0; i < data.metadata.resultCount; i++) {
+            if (options.filterMine && data[i].fullname === options.username) {
+              continue;
+            }
+
+            if (data[i].id <= lastLogId) {
+              break;
+            }
             newLogCount++;
-            lastLogId = data.data[0][field];
+          }
+
+          lastLogId = parseInt(data[0]['id']);
+          if (newLogCount > 0) {
             chrome.browserAction.setBadgeText({ 'text': newLogCount.toString() });
           }
         }
 
-        logMonitor = setTimeout(function() { monitorLogs(); }, 5000);
+        logMonitor = setTimeout(function() { monitorLogs(); }, monitorTimeout);
       })
       .fail(function() {
         // If there's no response JSON (disabled API), check again in 10 minutes
-        logMonitor = setTimeout(function() { monitorLogs(); }, 600000);
+        logMonitor = setTimeout(function() { monitorLogs(); }, monitorFailedTimeout);
+      });
+  }
+
+  function getFirstID() {
+    $.getJSON(options.hostname + "/api/logs/read", { "apikey": options.apikey, "limit": 1 })
+      .done(function(json) {
+        var data = json.data;
+        if (data.metadata.resultCount == 0) {
+          lastLogId = 0;
+        } else {
+          lastLogId = parseInt(data[0]['id']);
+        }
+
+        logMonitor = setTimeout(function() { monitorLogs(); }, monitorTimeout);
+      })
+      .fail(function() {
+        // If there's no response JSON (disabled API), check again in 10 minutes
+        logMonitor = setTimeout(function() { monitorLogs(); }, monitorFailedTimeout);
       });
   }
 
@@ -66,21 +104,35 @@
   }
 
   function goToDandelion() {
-    window.open(options.dAdd, "_blank");
+    window.open(options.hostname, "_blank");
+  }
+
+  function goToNewLog() {
+    window.open(`${options.hostname}/log/new`, "_blank");
+  }
+
+  function addContextMenuItems() {
+    chrome.contextMenus.create({
+      contexts: ['browser_action'],
+      onclick: goToNewLog,
+      title: "New Log Entry"
+    });
+
+    chrome.contextMenus.create({
+      contexts: ['browser_action'],
+      onclick: goToDandelion,
+      title: "Go to Dandelion"
+    });
+
+    chrome.contextMenus.create({
+      contexts: ['browser_action'],
+      onclick: clearLogCount,
+      title: "Clear log count"
+    });
   }
 
   loadSettings(monitorLogs);
-  chrome.contextMenus.create({
-    contexts: ['browser_action'],
-    onclick: clearLogCount,
-    title: "Clear log count"
-  });
-
-  chrome.contextMenus.create({
-    contexts: ['browser_action'],
-    onclick: goToDandelion,
-    title: "Go to Dandelion"
-  });
+  addContextMenuItems();
 
   // Export functions and variables
   window.options = options;
