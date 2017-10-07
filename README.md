@@ -1,13 +1,15 @@
-# Dandelion Extension
+# Cheesto Dandelion Extension
 
 This extension interfaces with Dandelion's public API to display the Cheesto status and recent log entries.
 
 ## Requirements
 
-* Chrome
+* Recent version of Chrome or Firefox
 * Dandelion v6+
 
 ## Use Instructions
+
+Chrome:
 
 1. Right click the extension icon
 2. Click Options
@@ -16,14 +18,39 @@ This extension interfaces with Dandelion's public API to display the Cheesto sta
 5. Click Save Options
 6. Click the extension icon to see user statuses and logs
 
+Firefox:
+
+1. Open the Menu in the top right (three horizontal lines)
+2. Click Add-ons
+3. Find "Cheesto User Status" and click Preferences to the right
+4. Enter the domain name or IP of your Dandelion instance
+5. Enter your API Key from Dandelion (found under Settings -> API Key in Dandelion)
+6. Click Save Options
+7. Click the extension icon to see user statuses and logs
+
 ## Build Instructions
+
+Chrome:
 
 1. Clone this git repo
 2. In Chrome, enable developer mode
 3. Click "Load unpacked extension" in extension management
-4. Navigate to the folder where you cloned the repo
+4. Navigate to the folder where you cloned the repo and select the folder
+
+Firefox:
+
+1. Clone this git repo
+2. Create a zip file of the repository contents
+3. In Firefox, go to "about:debugging"
+4. Click "Load Temporary Add-on"
+5. Navigate to the folder where you created the zip file and open it
 
 ## Release Notes
+
+v2.2.0
+
+- Fixed bugs where Firefox and Chrome apis differed
+- Added support for Firefox
 
 v2.1.1
 
