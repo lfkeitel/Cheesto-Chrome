@@ -33,5 +33,10 @@
 		"webRequest",
 		"contextMenus",
 		"tabs"
-	]
+	],
+	"applications": {
+		"gecko": {
+			"id": "cheesto-chrome@onesimussystems.com"
+		}
+	}
 }
