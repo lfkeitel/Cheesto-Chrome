@@ -23,7 +23,7 @@
 	"background": {
 		"persistent": true,
 		"scripts": [
-			"scripts/jquery-2.1.1.min.js",
+			"scripts/jquery-3.2.1.min.js",
 			"scripts/background.js"
 		]
 	},
