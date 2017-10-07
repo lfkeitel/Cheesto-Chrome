@@ -104,31 +104,48 @@
   }
 
   function goToDandelion() {
-    window.open(options.hostname, "_blank");
+    chrome.tabs.create({
+      active: true,
+      url: options.hostname
+    });
   }
 
   function goToNewLog() {
-    window.open(`${options.hostname}/log/new`, "_blank");
+    chrome.tabs.create({
+      active: true,
+      url: `${options.hostname}/log/new`
+    });
   }
 
   function addContextMenuItems() {
-    chrome.contextMenus.create({
+    const newLogMenuID = chrome.contextMenus.create({
       contexts: ['browser_action'],
-      onclick: goToNewLog,
       title: "New Log Entry"
     });
 
-    chrome.contextMenus.create({
+    const goToDandelionMenuID = chrome.contextMenus.create({
       contexts: ['browser_action'],
-      onclick: goToDandelion,
       title: "Go to Dandelion"
     });
 
-    chrome.contextMenus.create({
+    const clearLogMenuID = chrome.contextMenus.create({
       contexts: ['browser_action'],
-      onclick: clearLogCount,
       title: "Clear log count"
     });
+
+    chrome.contextMenus.onClicked.addListener(function(info, tab) {
+      switch(info.menuItemId) {
+        case newLogMenuID:
+          goToNewLog();
+          break;
+        case goToDandelionMenuID:
+          goToDandelion();
+          break;
+        case clearLogMenuID:
+          clearLogCount();
+          break;
+      }
+    })
   }
 
   loadSettings(monitorLogs);

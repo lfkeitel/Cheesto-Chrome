@@ -59,7 +59,7 @@
         // For some reason the click handler wasn't being applied
         // in the renderCheestoTable function so I'm applying it
         // here instead.
-        $('#statusSelect').click(function() { updateStatus(); });
+        $('#statusSelect').change(function() { updateStatus(); });
       })
       .fail(function(data) {
         if (data.status == 200) {
