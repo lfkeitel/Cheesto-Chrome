@@ -1,20 +1,20 @@
 (function() {
-  "use strict";
-  chrome.webRequest.onErrorOccurred.addListener(handleWebError, { urls: ["http://*/*", "https://*/*"] });
+  'use strict';
+  chrome.webRequest.onErrorOccurred.addListener(handleWebError, { urls: ['http://*/*', 'https://*/*'] });
 
   function handleWebError(details) {
-    if (details.error == "net::ERR_CONNECTION_REFUSED") {
+    if (details.error === 'net::ERR_CONNECTION_REFUSED') {
       displayStatus('Error validating API key. Connection Refused', 'error');
-    } else if (details.error == "net::ERR_NAME_NOT_RESOLVED") {
+    } else if (details.error === 'net::ERR_NAME_NOT_RESOLVED') {
       displayStatus('Invalid hostname. Name Not Resolved', 'error');
-    } else if (details.error == "net::ERR_ABORTED") {
-      return;
+    } else if (details.error === 'net::ERR_ABORTED') {
+      displayStatus('Connection aborted');
     } else {
       displayStatus('Error: ' + details.error, 'error');
     }
   }
 
-  function save_options() {
+  function saveOptions() {
     var address = $('#dan_address').val();
     var apikey = $('#dan_apikey').val();
     var logNum = $('#dan_log_number').val();
@@ -46,7 +46,7 @@
     $('#dan_apikey').val(apikey);
 
     // First test for version 6
-    $.getJSON(address + "/api/key/test", { "apikey": apikey })
+    $.getJSON(address + '/api/key/test', {'apikey': apikey})
       .done(function(data) {
         if (data.errorcode === 0) {
           storeSettings(address, apikey, 6, parsedLogNum, tabDefault, filterMine);
@@ -75,7 +75,7 @@
   }
 
   function validTabDefault(candidate) {
-    switch(candidate) {
+    switch (candidate) {
       case 'dynamic':
       case 'logs':
       case 'cheesto':
@@ -98,7 +98,7 @@
     }, 5000);
   }
 
-  function restore_options() {
+  function restoreOptions() {
     chrome.storage.local.get({
       dandelionAdd: '',
       dandelionAPI: '',
@@ -115,6 +115,6 @@
   }
 
   var statusTimeout;
-  document.addEventListener('DOMContentLoaded', restore_options);
-  $('#save').click(save_options);
+  document.addEventListener('DOMContentLoaded', restoreOptions);
+  $('#save').click(saveOptions);
 })();
