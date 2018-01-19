@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Cheesto User Status",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"author": "Onesimus Systems",
 	"description": "Quickly access basic Dandelion functions.",
 	"options_ui": {

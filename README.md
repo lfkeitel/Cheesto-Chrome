@@ -47,6 +47,11 @@ Firefox:
 
 ## Release Notes
 
+v2.2.1
+
+- Fixed version numbers
+- Needed to redeploy for Firefox
+
 v2.2.0
 
 - Fixed bugs where Firefox and Chrome apis differed
