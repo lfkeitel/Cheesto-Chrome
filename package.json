@@ -1,0 +1,27 @@
+{
+  "name": "cheesto-chrome",
+  "version": "1.0.0",
+  "description": "This extension interfaces with Dandelion's public API to display the Cheesto status and recent log entries.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lfkeitel/Cheesto-Chrome.git"
+  },
+  "author": "Lee keitel",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/lfkeitel/Cheesto-Chrome/issues"
+  },
+  "homepage": "https://github.com/lfkeitel/Cheesto-Chrome#readme",
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
+  },
+  "scripts": {
+    "package": "zip Cheesto-Chrome.zip scripts/* styles/* images/* LICENSE manifest.json *.html README.md",
+    "test": "eslint ./scripts/*"
+  }
+}
