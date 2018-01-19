@@ -1,8 +1,5 @@
-/*jshint multistr: true */
-
 (function() {
-  "use strict";
-  var refreshTimeout;
+  'use strict';
   var options = {};
 
   function main() {
@@ -11,7 +8,7 @@
     options.apikey = background.options.apikey;
     options.logLimit = background.options.logLimit;
 
-    switch(background.options.tabDefault) {
+    switch (background.options.tabDefault) {
       case 'logs':
         renderLogsView();
         break;
@@ -34,65 +31,62 @@
   }
 
   function swapPage(content, page) {
-    $(".tab").removeClass("active-tab");
-    $(`#${page}-tab`).addClass("active-tab");
+    $('.tab').removeClass('active-tab');
+    $(`#${page}-tab`).addClass('active-tab');
     $('#app').html(content.html());
   }
 
   function renderStatusView() {
     var fulladdress = `${options.hostname}/api/cheesto/read`;
 
-    $.getJSON(fulladdress, { "apikey": options.apikey })
+    $.getJSON(fulladdress, { 'apikey': options.apikey })
       .done(function(json) {
         if (json.errorcode !== 0) {
-          displayAPIError("cheesto");
+          displayAPIError('cheesto');
           return;
         }
 
-        var cheestoView = $("<div><h2>&#264;eesto User Status</h2></div>");
+        var cheestoView = $('<div><h2>&#264;eesto User Status</h2></div>');
 
         var html = renderCheestoTable(json.data);
 
         // Append content div to existing page element
         cheestoView.append(html);
-        swapPage(cheestoView, "cheesto");
+        swapPage(cheestoView, 'cheesto');
         // For some reason the click handler wasn't being applied
         // in the renderCheestoTable function so I'm applying it
         // here instead.
         $('#statusSelect').change(function() { updateStatus(); });
       })
       .fail(function(data) {
-        if (data.status == 200) {
-          displayAPIError("cheesto");
+        if (data.status === 200) {
+          displayAPIError('cheesto');
         }
       });
   }
 
   function renderCheestoTable(data) {
-    // Initialize variables
-    var user, key, html;
-
     // Generate select box of status options
     var statusSelect = $('<select/>');
     statusSelect.attr('id', 'statusSelect');
 
     statusSelect.append('<option value="-1">Select:</option>');
 
-    for (key in data.statusOptions) {
-      var html = `<option value="${data.statusOptions[key]}">${data.statusOptions[key]}</option>`;
+    for (const key in data.statusOptions) {
+      const html = `<option value="${data.statusOptions[key]}">${data.statusOptions[key]}</option>`;
       statusSelect.append(html);
     }
 
     // Generate the user status grid
-    var table = $('<table/>');
+    const table = $('<table/>');
 
     table.append('<tr><th width="50%">Name</th><th width="50%">Status</th></tr>');
 
-    for (key in data) {
+    for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        if (key !== "statusOptions") {
-          user = data[key];
-          html = `<tr>\
+        if (key !== 'statusOptions') {
+          const user = data[key];
+          const html = `<tr>\
             <td class="textLeft">\
               <span>${user.fullname}</span>\
             </td>\
@@ -105,20 +99,20 @@
       }
     }
 
-    var appendedContent = $('<div/>').attr('id', 'content');
-    appendedContent.append("Set status: ");
+    const appendedContent = $('<div/>').attr('id', 'content');
+    appendedContent.append('Set status: ');
     appendedContent.append(statusSelect);
     appendedContent.append(table);
     return appendedContent;
   }
 
   function updateStatus() {
-    var newStatus = $("select#statusSelect").val();
+    var newStatus = $('select#statusSelect').val();
 
-    var message = "";
+    var message = '';
 
-    if (newStatus !== "Available") {
-      message = prompt("Status Message:");
+    if (newStatus !== 'Available') {
+      message = prompt('Status Message:');
       if (message === null) {
         main();
         return;
@@ -130,7 +124,7 @@
         apikey: options.apikey,
         message: message,
         status: newStatus,
-        returntime: "Today"
+        returntime: 'Today'
       })
       .done(function() {
         main();
@@ -140,23 +134,23 @@
   function renderLogsView(logcount) {
     var fulladdress = `${options.hostname}/api/logs/read`;
 
-    $.getJSON(fulladdress, { "apikey": options.apikey, "limit": options.logLimit })
+    $.getJSON(fulladdress, {'apikey': options.apikey, 'limit': options.logLimit})
       .done(function(json) {
         if (json.errorcode !== 0) {
-          displayAPIError("logs");
+          displayAPIError('logs');
           return;
         }
 
-        var logView = $("<div></div>");
+        var logView = $('<div></div>');
 
         var html = renderLogTable(json.data);
         logView.append(html);
 
-        swapPage(logView, "logs");
+        swapPage(logView, 'logs');
       })
       .fail(function(resp) {
-        if (resp.status == 200) {
-          displayAPIError("logs");
+        if (resp.status === 200) {
+          displayAPIError('logs');
         }
       });
   }
@@ -165,12 +159,12 @@
     var table = $('<div></div>');
 
     for (var key in data) {
-      if (data.hasOwnProperty(key) && key !== "metadata") {
+      if (data.hasOwnProperty(key) && key !== 'metadata') {
         var log = data[key];
-        var classes = "log"
+        var classes = 'log';
 
         if (key < data.metadata.resultCount - 1) {
-          classes += " log-separator"
+          classes += ' log-separator';
         }
 
         var html = `<div class="${classes}">
@@ -196,14 +190,14 @@
   }
 
   function displayAPIError(page) {
-    var errormsg = $("<div><h2>An error has occured.<br><br>Make sure the public API is enabled in Dandelion.<br><br>Also check your API key.</h2></div>");
+    var errormsg = $('<div><h2>An error has occured.<br><br>Make sure the public API is enabled in Dandelion.<br><br>Also check your API key.</h2></div>');
     swapPage(errormsg, page);
   }
 
   function addEventListeners() {
     document.addEventListener('DOMContentLoaded', main);
-    $("#cheesto-tab").click(renderStatusView);
-    $("#logs-tab").click(renderLogsView);
+    $('#cheesto-tab').click(renderStatusView);
+    $('#logs-tab').click(renderLogsView);
   }
 
   addEventListeners();
