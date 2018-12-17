@@ -48,19 +48,19 @@
       .done(function(json) {
         var data = json.data;
 
-        if (data.metadata.resultCount > 0 && data[0].id > lastLogId) {
+        if (data.metadata.resultCount > 0 && data.logs[0].id > lastLogId) {
           for (var i = 0; i < data.metadata.resultCount; i++) {
-            if (options.filterMine && data[i].fullname === options.username) {
+            if (options.filterMine && data.logs[i].fullname === options.username) {
               continue;
             }
 
-            if (data[i].id <= lastLogId) {
+            if (data.logs[i].id <= lastLogId) {
               break;
             }
             newLogCount++;
           }
 
-          lastLogId = parseInt(data[0]['id']);
+          lastLogId = data.logs[0].id;
           if (newLogCount > 0) {
             chrome.browserAction.setBadgeText({ 'text': newLogCount.toString() });
           }
@@ -81,7 +81,7 @@
         if (data.metadata.resultCount === 0) {
           lastLogId = 0;
         } else {
-          lastLogId = parseInt(data[0]['id']);
+          lastLogId = data.logs[0].id;
         }
 
         logMonitor = setTimeout(function() { monitorLogs(); }, monitorTimeout);
