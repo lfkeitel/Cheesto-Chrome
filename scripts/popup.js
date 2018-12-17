@@ -82,20 +82,18 @@
 
     table.append('<tr><th width="50%">Name</th><th width="50%">Status</th></tr>');
 
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        if (key !== 'statusOptions') {
-          const user = data[key];
-          const html = `<tr>\
-            <td class="textLeft">\
-              <span>${user.fullname}</span>\
-            </td>\
-            <td>\
-              <span title="${user.returntime}\n\n${user.message}">${user.status}</span>\
-            </td>\
-          </tr>`;
-          table.append(html);
-        }
+    for (const key in data.statuses) {
+      if (data.statuses.hasOwnProperty(key)) {
+        const user = data.statuses[key];
+        const html = `<tr>\
+          <td class="textLeft">\
+            <span>${user.fullname}</span>\
+          </td>\
+          <td>\
+            <span title="${user.returntime}\n\n${user.message}">${user.status}</span>\
+          </td>\
+        </tr>`;
+        table.append(html);
       }
     }
 
@@ -158,9 +156,9 @@
   function renderLogTable(data) {
     var table = $('<div></div>');
 
-    for (var key in data) {
-      if (data.hasOwnProperty(key) && key !== 'metadata') {
-        var log = data[key];
+    for (var key in data.logs) {
+      if (data.logs.hasOwnProperty(key)) {
+        var log = data.logs[key];
         var classes = 'log';
 
         if (key < data.metadata.resultCount - 1) {
