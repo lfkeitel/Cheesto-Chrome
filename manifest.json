@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Cheesto User Status",
-	"version": "2.2.3",
+	"version": "2.2.4",
 	"author": "Onesimus Systems",
 	"description": "Quickly access user statuses and recent log entries from Dandelion.",
 	"options_ui": {
@@ -31,8 +31,7 @@
 		"https://*/",
 		"storage",
 		"webRequest",
-		"contextMenus",
-		"tabs"
+		"contextMenus"
 	],
 	"applications": {
 		"gecko": {
